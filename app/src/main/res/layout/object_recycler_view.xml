@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cardview="http://schemas.android.com/tools"
+    android:id="@+id/cv"
+    android:layout_width="124dp"
+    android:layout_height="136dp"
+    android:layout_margin="4dp"
+    cardview:cardCornerRadius="8dp"
+    cardview:cardElevation="24dp">
+
+    <RelativeLayout
+        android:id="@+id/rec_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        android:background="@color/common_action_bar_splitter">
+
+        <TextView
+            android:id="@+id/Text_Descrip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Zlatarsi magazin"
+            android:textSize="14sp"
+            android:layout_alignParentBottom="false" />
+
+
+        <ImageView
+            android:id="@+id/Img_View_Speed1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignLeft="@+id/Text_Descrip"
+            android:layout_alignStart="@+id/Text_Descrip"
+            android:layout_below="@+id/Text_Descrip"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorNormalSpeed"
+            android:paddingTop="10dp" />
+
+        <ImageView
+            android:id="@+id/Img_View_Speed2"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignLeft="@+id/Img_View_Speed1"
+            android:layout_alignStart="@+id/Img_View_Speed1"
+            android:layout_below="@+id/Img_View_Speed1"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorHideSpeed"
+            android:paddingTop="10dp" />
+
+
+        <ImageView
+            android:id="@+id/Img_View_Speed3"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignLeft="@+id/Img_View_Speed2"
+            android:layout_alignStart="@+id/Img_View_Speed2"
+            android:layout_below="@+id/Img_View_Speed2"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorLowSpeed"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/Text_Host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/Img_View_Speed1"
+            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
+            android:layout_toEndOf="@+id/Img_View_Speed1"
+            android:layout_toRightOf="@+id/Img_View_Speed1"
+            android:text="Magazin"
+            android:textSize="12sp"
+            android:layout_above="@+id/Img_View_Speed2" />
+
+        <TextView
+            android:id="@+id/Last_Speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Img_View_Speed3"
+            android:paddingTop="2dp"
+            android:text="122"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/Text_Device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NVR"
+            android:textSize="14sp"
+            android:layout_alignTop="@+id/Img_View_Speed2"
+            android:layout_alignLeft="@+id/Text_Host"
+            android:layout_alignStart="@+id/Text_Host"
+            android:layout_above="@+id/Img_View_Speed3" />
+
+        <TextView
+            android:id="@+id/Text_Address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vraza, bul.M.Orozow 33"
+            android:textSize="12sp"
+            android:layout_alignTop="@+id/Img_View_Speed3"
+            android:layout_alignLeft="@+id/Text_Device"
+            android:layout_alignStart="@+id/Text_Device"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
