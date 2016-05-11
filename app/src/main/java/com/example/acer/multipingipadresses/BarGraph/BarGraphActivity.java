@@ -107,16 +107,29 @@ public class BarGraphActivity extends AppCompatActivity {
         ArrayList<String> timeMeasurement = new ArrayList<>();
         ;
         int sizeSampleArrayList = sampleList.size();
+        int validMeasurement =0;
         if (sizeSampleArrayList < 30) {
             for (int i = 0; i < sampleList.size(); i++) {
-                imgSpeed.add(sampleList.get(i).getMeasurementValue());
+                if (sampleList.get(i).getMeasurementValue()>200) {
+                    validMeasurement = 200;
+
+                }else{
+                    validMeasurement = sampleList.get(i).getMeasurementValue();
+                }
+                imgSpeed.add(validMeasurement);
                 timeMeasurement.add(sampleList.get(i).getTimeMeasurement());
             }
         } else {
 
             Log.e("abc", "  ------sampleArrayList.size- " + (sampleList.size()));
-            for (int i = sizeSampleArrayList-30; i <=sizeSampleArrayList; i++) {
-                imgSpeed.add(sampleList.get(i).getMeasurementValue());
+            for (int i = sizeSampleArrayList-30; i <sizeSampleArrayList; i++) {
+                if (sampleList.get(i).getMeasurementValue()>200) {
+                    validMeasurement = 200;
+
+                }else{
+                    validMeasurement = sampleList.get(i).getMeasurementValue();
+                }
+                imgSpeed.add(validMeasurement);
                 timeMeasurement.add(sampleList.get(i).getTimeMeasurement());
                 Log.e("abc", "  imgSpeed[" + i + "]= " + sampleList.get(i).getMeasurementValue());
             }

@@ -75,8 +75,8 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
             new addDefaultDataAsyncTask(this).execute();
             fl = true;
         }
-        ping("213.231.171.91");
-         new PingDataAsyncTask().execute();
+
+        new PingDataAsyncTask().execute();
 
 
     }
@@ -225,7 +225,7 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
 
 //    *****************************************************************
 
-    private class PingDataAsyncTask extends AsyncTask<Void, Void, Void> {
+    public class PingDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private Context mContext;
 
         @Override
@@ -243,13 +243,38 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
             SampleAdapter sampleAdapter = new SampleAdapter(DataBaseActivity.this);
 
             Log.e("addPingData", "Broy Object = " + objectAdapter.getAllRecords().size());
-            int k = 0;
-            while (k < 2) {
-                List<Object> objectList = new ArrayList<>();
-                for (Object curenrObject : objectList) {
+//            int k = 0;
+//            while (k < 2) {
+            List<Object> objectList = new ArrayList<>();
+            objectList = objectAdapter.getAllRecords();
 
+//            for (int i = 1; i <= objectList.size(); i++) {
+//                Log.e("addPingData", "ping i = " + i);
+//                int idCurendObject = objectAdapter.findById(i).getId();
+//                Log.e("addPingData", "ping idCurendObject = " + idCurendObject);
+//                int speed = 0;
+//                String url = objectAdapter.findById(i).getIpAddress();
+//
+//                speed = ping(url);
+//                Log.e("addPingData", " ping url = " + url);
+//
+//
+//                sampleAdapter.insert(new Sample(idCurendObject,
+//                        1,
+//                        speed,
+//                        getCurrentTimeStamp()));
+//
+//                Log.e("addPingData", "Object ID= " + idCurendObject +
+//                        " Object IP= " + objectAdapter.findById(i).getIpAddress() +
+//                        " PingSpeed = " + speed +
+//                        " time = " + getCurrentTimeStamp());
+//
+//            }
+            int k=0;
+            while (k<2) {
+                for (Object curenrObject : objectList) {
                     int idCurendObject = curenrObject.getId();
-                    Log.e("addPingData", "ping idCurendObject = " + idCurendObject);
+                    Log.e("addPingData", "ping idCurendObject = " + idCurendObject+"  ping k = " + k);
                     int speed = 0;
                     String url = curenrObject.getIpAddress();
 
@@ -269,6 +294,7 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
 
                 }
             }
+//            }
 
 
 //            //вызывается в фоновом потоке сразу после onPreExecute ()
