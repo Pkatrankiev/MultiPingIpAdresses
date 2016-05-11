@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                                    } else {
                                                        Intent intentDB = new Intent(LoginActivity.this, DataBaseActivity.class);
+                                                       intentDB.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                        intentDB.putExtra("User_Type",checkUser());
                                                        startActivity(intentDB);
 
@@ -115,4 +116,11 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+    }
 }

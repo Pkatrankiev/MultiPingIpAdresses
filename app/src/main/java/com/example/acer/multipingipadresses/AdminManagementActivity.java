@@ -96,4 +96,10 @@ public class AdminManagementActivity extends AppCompatActivity implements View.O
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    public void onBackPressed(){
+        Intent a = new Intent(this,LoginActivity.class);
+
+        startActivity(a);
+    }
 }
