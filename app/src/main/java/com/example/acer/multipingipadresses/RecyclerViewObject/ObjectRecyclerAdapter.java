@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.acer.multipingipadresses.R;
+import com.example.acer.multipingipadresses.database.DeviceAdapter;
+import com.example.acer.multipingipadresses.database.HostAdapter;
 import com.example.acer.multipingipadresses.database.ObjectAdapter;
+import com.example.acer.multipingipadresses.database.models.Host;
+import com.example.acer.multipingipadresses.database.models.Object;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +35,9 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
 
     List<ObjectEvents> eventt = new ArrayList<>();
     public Context context;
+    private View dialog;
+    private Fragment fragment;
+    private FragmentTransaction ft;
 
     public ObjectRecyclerAdapter(List<ObjectEvents> eventt) {
         this.eventt = eventt;
@@ -39,6 +48,7 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.object_manag_recycler_view, parent, false);
         ViewHolder vh = new ViewHolder(v);
+
         return vh;
 
     }
@@ -172,19 +182,35 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
 
                 break;
                 case R.id.image_button_edit: {
+
+
                     View dialogFragment = LayoutInflater.from(context).inflate(R.layout.dialog_fragment, null);
-//                    View dialogFragment = getLayoutInflater().inflate(R.layout.dialog_fragment, null, false);
-                    EditText editTxtAddress = (EditText) dialogFragment.findViewById(R.id.edit_txt_address);
+//
                     final EditText editTxtDescript = (EditText) dialogFragment.findViewById(R.id.edit_txt_descrip);
+                    final EditText editTxtIpAddress = (EditText) dialogFragment.findViewById(R.id.edit_txt_ip);
+                    final EditText editTxtAddress = (EditText) dialogFragment.findViewById(R.id.edit_txt_address);
+                    final EditText editTxtInfo = (EditText) dialogFragment.findViewById(R.id.edit_txt_info);
+                    final EditText editTxtHostType = (EditText) dialogFragment.findViewById(R.id.edit_txt_host_type);
+                    final EditText editTxtDeviceType = (EditText) dialogFragment.findViewById(R.id.edit_txt_device_type);
 
 //
-                    editTxtDescript.setText(eventt.get(position).getDescrip());
-//                    editTxtIp.setText(eventt.get(position).getObjectIp());
-                    editTxtAddress.setText("123456");
-                    editTxtAddress.postInvalidate();
-//                    editTxtInfo.setText(eventt.get(position).getInfo());
-//                    editTxtDeviceType.setText(eventt.get(position).getDeviceType());
-//                    editTxtHostType.setText(eventt.get(position).getHostType());
+                    ObjectAdapter editObjectAdap = new ObjectAdapter(context);
+                    final HostAdapter hostAdap = new HostAdapter(context);
+                    Host host = new Host();
+                    final DeviceAdapter devAdap = new DeviceAdapter(context);
+                    final int objectId = eventt.get(position).getObjectId();
+                    Object editObject = editObjectAdap.findById(objectId);
+
+                    editTxtDescript.setText(editObject.getDescrip());
+                    editTxtIpAddress.setText(editObject.getIpAddress());
+                    editTxtAddress.setText(editObject.getAdress());
+                    editTxtInfo.setText(editObject.getInfo());
+                    editTxtHostType.setText((hostAdap.findById(editObject.getHostTypeId())).getHostType());
+                    editTxtDeviceType.setText((devAdap.findById(editObject.getDeviceTypeId())).getDeviceType());
+                    final int hostID = editObject.getHostTypeId();
+                    final int deviceID = editObject.getDeviceTypeId();
+
+                    String descr = String.valueOf(editTxtAddress.getText());
 
 
                     String dialogTitle = "Променете данните на обект: " + eventt.get(position).getDescrip();
@@ -193,7 +219,7 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setIcon(R.drawable.edit_icon);
                     builder.setTitle(dialogTitle);
-                    builder.setView(R.layout.dialog_fragment);
+                    builder.setView(dialogFragment);
                     builder.setMessage(dialogMessage);
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -201,14 +227,25 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
                             notifyDataSetChanged();
                         }
                     }, 500);
-                    builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-
+                    builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
 
 
                         public void onClick(DialogInterface dialog, int id) {
                             ObjectAdapter objectAdapter = new ObjectAdapter(context);
-//                            Toast.makeText(ObjectRecyclerAdapter.this, "Влизате като device_management_button", Toast.LENGTH_LONG).show();
-                            Log.e("-------------------", String.valueOf(editTxtDescript.getText()));
+
+
+//
+                            String descr = String.valueOf(editTxtDescript.getText());
+                            String ipAddress = String.valueOf(editTxtIpAddress.getText());
+                            String address = String.valueOf(editTxtAddress.getText());
+                            String info = String.valueOf(editTxtInfo.getText());
+                            String hostType = String.valueOf(editTxtHostType.getText());
+                            String deviceType = String.valueOf(editTxtDeviceType.getText());
+
+                            Object obj = new Object(ipAddress, descr, address, info, hostID, deviceID);
+                            objectAdapter.update_byID(objectId, obj);
+
+                            Log.e("-------------------", String.valueOf(editTxtAddress.getText()));
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -217,7 +254,7 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
                             }, 500);
                         }
                     });
-                    builder.setNegativeButton("Не", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                         }
                     });
@@ -226,13 +263,25 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
                     break;
 
                 }
+
             }
 
+        }
 
+        public void updateData(ArrayList<ViewModel> viewModels) {
+            items.clear();
+            items.addAll(viewModels);
+            notifyDataSetChanged();
+        }
 //                -----------dialog fragment--------------
 
 
+        public View getDialog() {
+            return dialog;
+
         }
+
+
     }
 }
 

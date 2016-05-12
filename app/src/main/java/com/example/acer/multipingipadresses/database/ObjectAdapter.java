@@ -51,6 +51,20 @@ public class ObjectAdapter extends Adapter {
                 values);
     }
 
+    public void update_byID(int id, Model model){
+        Object probe = (Object) model;
+        ContentValues values = new ContentValues();
+        values.put(IP_ADRESS, probe.getIpAddress());
+        values.put(DESCRIP, probe.getDescrip());
+        values.put(INFO, probe.getInfo());
+        values.put(ADRESS, probe.getAdress());
+        values.put(HOST_ID, probe.getHostTypeId());
+        values.put(DEVICE_ID, probe.getDeviceTypeId());
+
+        db.update(TABLE_NAME, values, _ID+"="+id, null);
+    }
+
+
     @Override
     public void delete(int id) {
         String selection = _ID + " LIKE ?";
