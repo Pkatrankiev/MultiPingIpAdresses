@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.acer.multipingipadresses.database.models.Device;
 import com.example.acer.multipingipadresses.database.models.Host;
 import com.example.acer.multipingipadresses.database.models.Model;
 
@@ -60,6 +59,34 @@ public class HostAdapter  extends Adapter {
                 projection,                               // The columns to return
                 _ID + "=?",                                // The columns for the WHERE clause
                 new String[]{String.valueOf(id)},          // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+        c.moveToFirst();
+        if (c.getCount() > 0) {
+            Host host = new Host();
+            host.setId(c.getInt(c.getColumnIndex(_ID)));
+            host.setHostType(c.getString(c.getColumnIndex(HOST_TYPE)));
+            return host;
+        }
+        return null;
+    }
+
+
+    public Host findByHosType(String hostType) {
+        String[] projection = {
+                _ID,
+                HOST_TYPE};
+
+        String sortOrder =
+                _ID + " DESC";
+
+        Cursor c = db.query(
+                TABLE_NAME,                                // The table to query
+                projection,                               // The columns to return
+                HOST_TYPE + "=?",                                // The columns for the WHERE clause
+                new String[]{String.valueOf(hostType)},          // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
                 sortOrder                                 // The sort order

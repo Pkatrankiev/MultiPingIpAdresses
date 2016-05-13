@@ -2,6 +2,7 @@ package com.example.acer.multipingipadresses.RecyclerViewObject;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,15 +13,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.acer.multipingipadresses.R;
 import com.example.acer.multipingipadresses.database.DeviceAdapter;
 import com.example.acer.multipingipadresses.database.HostAdapter;
 import com.example.acer.multipingipadresses.database.ObjectAdapter;
+import com.example.acer.multipingipadresses.database.models.Device;
 import com.example.acer.multipingipadresses.database.models.Host;
 import com.example.acer.multipingipadresses.database.models.Object;
 
@@ -35,9 +40,16 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
 
     List<ObjectEvents> eventt = new ArrayList<>();
     public Context context;
+
     private View dialog;
     private Fragment fragment;
     private FragmentTransaction ft;
+
+    Spinner spinnerDevice;
+    Spinner spinnerHost;
+
+    ArrayAdapter<String> SpinnerAdapter;
+
 
     public ObjectRecyclerAdapter(List<ObjectEvents> eventt) {
         this.eventt = eventt;
@@ -63,7 +75,7 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         holder.txtIp.setText(event.getObjectIp());
         holder.txtAddress.setText(event.getAddress());
         holder.txtInfo.setText(event.getInfo());
-        holder.txtHostType.setText(event.getDeviceType());
+        holder.txtHostType.setText(event.getHostType());
         holder.txtDeviceType.setText(event.getDeviceType());
 
         context = holder.itemView.getContext();
@@ -99,8 +111,7 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
 
         @Bind(R.id.layout_object)
         LinearLayout layoutObject;
-        //                @Bind(R.layout.dialog_fragment)
-//        LinearLayout dialogFragment;
+
         @Bind(R.id.text_descrip)
         TextView txtDescript;
         @Bind(R.id.text_ip)
@@ -113,25 +124,15 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         TextView txtHostType;
         @Bind(R.id.text_device_type)
         TextView txtDeviceType;
+
+
         @Bind(R.id.image_button_edit)
         ImageView imgBtnEdit;
         @Bind(R.id.image_button_del)
         ImageView imgBtnDel;
 
-        //        @Bind(R.id.edit_txt_descrip)
-//        TextView editTxtDescript;
-//        @Bind(R.id.edit_txt_ip)
-//        TextView editTxtIp;
-//        @Bind(R.id.edit_txt_address)
-//        TextView editTxtAddress;
-//        @Bind(R.id.edit_txt_info)
-//        TextView editTxtInfo;
-//        @Bind(R.id.edit_txt_host_type)
-//        TextView editTxtHostType;
-//        @Bind(R.id.edit_txt_device_type)
-//        TextView editTxtDeviceType;
+
         int position;
-//View dialog = getLayoutInflater().inflate(R.layout.dialog_fragment, null, false);
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -185,19 +186,136 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
 
 
                     View dialogFragment = LayoutInflater.from(context).inflate(R.layout.dialog_fragment, null);
-//
+
                     final EditText editTxtDescript = (EditText) dialogFragment.findViewById(R.id.edit_txt_descrip);
                     final EditText editTxtIpAddress = (EditText) dialogFragment.findViewById(R.id.edit_txt_ip);
                     final EditText editTxtAddress = (EditText) dialogFragment.findViewById(R.id.edit_txt_address);
                     final EditText editTxtInfo = (EditText) dialogFragment.findViewById(R.id.edit_txt_info);
-                    final EditText editTxtHostType = (EditText) dialogFragment.findViewById(R.id.edit_txt_host_type);
-                    final EditText editTxtDeviceType = (EditText) dialogFragment.findViewById(R.id.edit_txt_device_type);
 
-//
-                    ObjectAdapter editObjectAdap = new ObjectAdapter(context);
-                    final HostAdapter hostAdap = new HostAdapter(context);
+
                     Host host = new Host();
                     final DeviceAdapter devAdap = new DeviceAdapter(context);
+
+//                    ////////////////////////////////////////////////////
+
+
+                    spinnerHost = (Spinner) dialogFragment.findViewById(R.id.spinner_host_type);
+
+
+//                    1111111111111111111111111111111111111111111111111111111111111111
+
+                    ArrayList<String> hostStringList = new ArrayList<>();
+                    final HostAdapter hostAdap = new HostAdapter(context);
+                    List<Host> listHost = new ArrayList<Host>(); // List of Items
+                    listHost = hostAdap.getAllRecords();
+                    int kk=0;
+                    Log.e("curentHost", " size lis= "+listHost.size());
+                    for (Host curentHost : listHost) {
+                            String str = curentHost.getHostType();
+                        Log.e("curentHost", " curentHost = " + str+" kk = "+kk);
+                        hostStringList.add(str);
+                        kk++;
+                    }
+                    SpinnerAdapter = new ArrayAdapter<String>
+                            (context, android.R.layout.simple_spinner_item, hostStringList) {
+
+                        public View getView(int position, View convertView,
+                                            ViewGroup parent) {
+                            View v = super.getView(position, convertView, parent);
+
+
+                            ((TextView) v).setTextColor(Color.parseColor("#E30D81"));
+                            return v;
+                        }
+
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View v = super.getDropDownView(position, convertView,
+                                    parent);
+                            v.setBackgroundColor(Color.parseColor("#E30D81"));
+
+                            ((TextView) v).setTextColor(Color.parseColor("#ffffff"));
+
+                            return v;
+                        }
+                    };
+                    SpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerHost.setAdapter(SpinnerAdapter);
+                    // Set Adapter in the spinner
+
+                    spinnerHost.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                            String stateHost = parentView.getItemAtPosition(position).toString(); // selected item in the list
+//                            ((TextView) findViewById(R.id.selectedText)).setText(state);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parentView) {
+                            // your code here
+                        }
+                    });
+
+
+//      2222222222222222222222222222222222222222222222222222222222222222222222
+                    ArrayList<String> deviceList = new ArrayList<>();
+                    spinnerDevice = (Spinner) dialogFragment.findViewById(R.id.spinner_device_type);
+                    List<Device> listDev = new ArrayList<Device>(); // List of Items
+                    listDev = devAdap.getAllRecords();
+                    for (Device curentDev : listDev) {
+                        deviceList.add(curentDev.getDeviceType());
+                    }
+
+
+//
+                    SpinnerAdapter = new ArrayAdapter<String>
+                            (context, android.R.layout.simple_spinner_item, deviceList) {
+
+                        public View getView(int position, View convertView,
+                                            ViewGroup parent) {
+                            View v = super.getView(position, convertView, parent);
+
+
+                            ((TextView) v).setTextColor(Color.parseColor("#E30D81"));
+                            return v;
+                        }
+
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View v = super.getDropDownView(position, convertView,
+                                    parent);
+                            v.setBackgroundColor(Color.parseColor("#E30D81"));
+
+                            ((TextView) v).setTextColor(Color.parseColor("#ffffff"));
+
+                            return v;
+                        }
+                    };
+
+
+
+                    spinnerDevice.setAdapter(SpinnerAdapter);
+                    spinnerDevice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                            String stateDevice = parentView.getItemAtPosition(position).toString(); // selected item in the list
+//                            ((TextView) findViewById(R.id.selectedText)).setText(state);
+                        }
+
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parentView) {
+                            // your code here
+                        }
+                    });
+
+//      ////////////////////////////////////////////////////////////
+
+
+                    ObjectAdapter editObjectAdap = new ObjectAdapter(context);
+
                     final int objectId = eventt.get(position).getObjectId();
                     Object editObject = editObjectAdap.findById(objectId);
 
@@ -205,8 +323,10 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
                     editTxtIpAddress.setText(editObject.getIpAddress());
                     editTxtAddress.setText(editObject.getAdress());
                     editTxtInfo.setText(editObject.getInfo());
-                    editTxtHostType.setText((hostAdap.findById(editObject.getHostTypeId())).getHostType());
-                    editTxtDeviceType.setText((devAdap.findById(editObject.getDeviceTypeId())).getDeviceType());
+
+                    selectValue(spinnerHost,(hostAdap.findById(editObject.getHostTypeId())).getHostType());
+                    selectValue(spinnerDevice,(devAdap.findById(editObject.getDeviceTypeId())).getDeviceType());
+
                     final int hostID = editObject.getHostTypeId();
                     final int deviceID = editObject.getDeviceTypeId();
 
@@ -239,10 +359,15 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
                             String ipAddress = String.valueOf(editTxtIpAddress.getText());
                             String address = String.valueOf(editTxtAddress.getText());
                             String info = String.valueOf(editTxtInfo.getText());
-                            String hostType = String.valueOf(editTxtHostType.getText());
-                            String deviceType = String.valueOf(editTxtDeviceType.getText());
 
-                            Object obj = new Object(ipAddress, descr, address, info, hostID, deviceID);
+
+//                            String hostType = String.valueOf(editTxtHostType.getText());
+//                            String deviceType = String.valueOf(editTxtDeviceType.getText());
+
+                            int hostId = hostAdap.findByHosType(spinnerHost.getSelectedItem().toString()).getId();
+                           int deviceId = devAdap.findByDevType(spinnerDevice.getSelectedItem().toString()).getId();
+
+                            Object obj = new Object(ipAddress, descr, address, info, hostID, deviceId);
                             objectAdapter.update_byID(objectId, obj);
 
                             Log.e("-------------------", String.valueOf(editTxtAddress.getText()));
@@ -252,12 +377,21 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
                                     notifyDataSetChanged();
                                 }
                             }, 500);
+
+
+
                         }
                     });
                     builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                         }
                     });
+
+
+                    int width = context.getResources().getDisplayMetrics().widthPixels;
+                    int height = context.getResources().getDisplayMetrics().heightPixels;
+                    dialogFragment.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     break;
@@ -268,9 +402,9 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
 
         }
 
-        public void updateData(ArrayList<ViewModel> viewModels) {
-            items.clear();
-            items.addAll(viewModels);
+        public void updateData(List<ObjectEvents> viewModels) {
+            eventt.clear();
+            eventt.addAll(viewModels);
             notifyDataSetChanged();
         }
 //                -----------dialog fragment--------------
@@ -279,6 +413,16 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         public View getDialog() {
             return dialog;
 
+
+        }
+
+        private void selectValue(Spinner spinner, String value) {
+            for (int i = 0; i < spinner.getCount(); i++) {
+                if (spinner.getItemAtPosition(i).equals(value)) {
+                    spinner.setSelection(i);
+                    break;
+                }
+            }
         }
 
 

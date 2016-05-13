@@ -33,9 +33,11 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         final List<Events> eventsList = generateEvents();
 
+       int kolum = getWindowManager().getDefaultDisplay().getWidth()/124;
+       int height = getWindowManager().getDefaultDisplay().getHeight();
 
         final RecyclerView recView = (RecyclerView) findViewById(R.id.rec_view);
-        recView.setLayoutManager(new GridLayoutManager(this, 3));
+        recView.setLayoutManager(new GridLayoutManager(this, kolum));
         final MyAdapter myAdapter = new MyAdapter(eventsList);
 
         recView.setAdapter(myAdapter);

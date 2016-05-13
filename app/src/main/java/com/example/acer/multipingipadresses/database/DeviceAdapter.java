@@ -8,6 +8,7 @@ import com.example.acer.multipingipadresses.database.models.Device;
 import com.example.acer.multipingipadresses.database.models.Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DeviceAdapter extends Adapter {
     public static final String TABLE_NAME = "device";
@@ -89,7 +90,37 @@ public class DeviceAdapter extends Adapter {
         return device;
     }
 
-    public ArrayList<Device> getAllRecords() {
+    public Device findByDevType(String type) {
+//        db = DBHelper.ReadDatabase();
+
+        String[] projection = {
+                _ID,
+                DEVICE_TYPE};
+
+        String sortOrder =
+                _ID + " DESC";
+
+        Cursor c = db.query(
+                TABLE_NAME,                                // The table to query
+                projection,                               // The columns to return
+                DEVICE_TYPE + "=?",                                // The columns for the WHERE clause
+                new String[]{String.valueOf(type)},          // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+        c.moveToFirst();
+        Device device = new Device();
+        if (c.getCount() > 0) {
+            device.setId(c.getInt(c.getColumnIndex(_ID)));
+            device.setDeviceType(c.getString(c.getColumnIndex(DEVICE_TYPE)));
+        } else device = null;
+//        c.close();
+//        db.close();
+        return device;
+    }
+
+    public List<Device> getAllRecords() {
 //        db = DBHelper.ReadDatabase();
 
         Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
