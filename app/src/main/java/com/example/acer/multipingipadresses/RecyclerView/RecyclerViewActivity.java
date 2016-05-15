@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.acer.multipingipadresses.BarGraph.BarGraphActivity;
 import com.example.acer.multipingipadresses.R;
+import com.example.acer.multipingipadresses.database.DataBaseTask;
 import com.example.acer.multipingipadresses.database.DeviceAdapter;
 import com.example.acer.multipingipadresses.database.HostAdapter;
 import com.example.acer.multipingipadresses.database.ObjectAdapter;
@@ -38,7 +39,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         final RecyclerView recView = (RecyclerView) findViewById(R.id.rec_view);
         recView.setLayoutManager(new GridLayoutManager(this, kolum));
-        final MyAdapter myAdapter = new MyAdapter(eventsList);
+        final MyAdapter myAdapter = new MyAdapter(eventsList, 0);
 
         recView.setAdapter(myAdapter);
 
@@ -62,6 +63,14 @@ public class RecyclerViewActivity extends AppCompatActivity {
         }));
 
 
+        DataBaseTask dbTask = DataBaseTask.getInstance(new Intent(), this);
+        dbTask.setPingListener(new DataBaseTask.OnPingReceivedListener() {
+            @Override
+            public void onPing(int idCurrentObject) {
+                Log.e("RecView", "Refreshing rec view");
+                recView.setAdapter(new MyAdapter(generateEvents(), idCurrentObject));
+            }
+        });
     }
 //    @Override
 //    public void onBackPressed() {

@@ -18,10 +18,12 @@ import butterknife.ButterKnife;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
+    private final int idCurrentObject;
     List<Events> eventt = new ArrayList<>();
 
 
-    public MyAdapter(List<Events> eventt) {
+    public MyAdapter(List<Events> eventt, int idCurrentObject) {
+        this.idCurrentObject = idCurrentObject;
         this.eventt = eventt;
     }
 
@@ -54,6 +56,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.imgSpeed2.setBackgroundColor(Color.parseColor(collorImage(event.getImgSpeed2())));
         holder.imgSpeed3.setBackgroundColor(Color.parseColor(collorImage(event.getImgSpeed3())));
 
+        if(idCurrentObject == event.getObjectId()) {
+            holder.txtDescript.setTextColor(Color.BLUE);
+        } else {
+            holder.txtDescript.setTextColor(Color.BLACK);
+        }
     }
 
    class ViewHolder extends RecyclerView.ViewHolder {

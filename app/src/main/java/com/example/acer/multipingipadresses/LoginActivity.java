@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.acer.multipingipadresses.database.DataBaseActivity;
+import com.example.acer.multipingipadresses.database.DataBaseTask;
 import com.example.acer.multipingipadresses.database.UserAdapter;
 import com.example.acer.multipingipadresses.database.models.User;
 
@@ -50,10 +50,10 @@ public class LoginActivity extends AppCompatActivity {
                                                        Toast.makeText(getApplicationContext(), "Invalid name or password", Toast.LENGTH_LONG).show();
 
                                                    } else {
-                                                       Intent intentDB = new Intent(LoginActivity.this, DataBaseActivity.class);
+                                                       Intent intentDB = new Intent();
                                                        intentDB.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                        intentDB.putExtra("User_Type",checkUser());
-                                                       startActivity(intentDB);
+                                                       DataBaseTask dbTasl = DataBaseTask.getInstance(intentDB, LoginActivity.this);
 
                                                    }
                                                }

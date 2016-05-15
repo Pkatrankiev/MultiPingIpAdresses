@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RecyclerView.RecyclerViewActivity" />
-        <activity android:name=".database.DataBaseActivity" />
+        <activity android:name=".database.DataBaseTask" />
         <activity android:name=".BarGraph.BarGraphActivity" />
         <activity android:name=".AdminManagementActivity" />
         <activity android:name=".RecyclerViewObject.ObjectRecyclerViewActivity"></activity>

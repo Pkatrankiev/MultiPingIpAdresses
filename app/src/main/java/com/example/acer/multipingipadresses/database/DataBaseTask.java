@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,21 +27,29 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DataBaseActivity extends ActionBarActivity implements TaskCompleted {
+public class DataBaseTask implements TaskCompleted {
+    private final Context context;
     ProgressDialog pDialog;
 
-//    public ArrayList<Object> objectList;
+    private static DataBaseTask instance;
+
+    public static DataBaseTask getInstance(Intent i, Context context) {
+        if(instance == null) {
+            instance = new DataBaseTask(i, context);
+        }
+        return instance;
+    }
+
+    //    public ArrayList<Object> objectList;
 //    public ArrayList<ObjectValues> objectValuesList;
 //    public ArrayList<ObjectString> valuesList;
+    OnPingReceivedListener listener;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_data_base);
-
+    private DataBaseTask(Intent i, Context context) {
+        this.context = context;
         CheckDataBase();
 
-        Intent intent1 = getIntent();
+        Intent intent1 = i;
         Bundle bundle = intent1.getExtras();
         String data = "";
         if (bundle != null) {
@@ -50,15 +57,15 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
         }
 
         if (data.equals("admin")) {
-            Toast.makeText(getApplicationContext(), "Влизате като админ", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, AdminManagementActivity.class);
+            Toast.makeText(context, "Влизате като админ", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, AdminManagementActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            context.startActivity(intent);
         } else {
-            Toast.makeText(getApplicationContext(), "Влизате като юзер", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, AdminManagementActivity.class);
+            Toast.makeText(context, "Влизате като юзер", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, AdminManagementActivity.class);
 
-            startActivity(intent);
+            context.startActivity(intent);
         }
 
     }
@@ -67,12 +74,12 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
 
         boolean fl = false;
 
-        ObjectAdapter objectAdapter = new ObjectAdapter(this);
+        ObjectAdapter objectAdapter = new ObjectAdapter(context);
 
         Log.e("DBActivity-onCreate", "objectAdapter size = " + objectAdapter.getAllRecords().size());
 
         if (objectAdapter.getAllRecords().size() == 0) {
-            new addDefaultDataAsyncTask(this).execute();
+            new addDefaultDataAsyncTask(context).execute();
             fl = true;
         }
 
@@ -103,7 +110,7 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
     @Override
     public void onTaskComplete(Integer result) {
 
-        Toast.makeText(this, "The result is " + Integer.toString(result), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "The result is " + Integer.toString(result), Toast.LENGTH_LONG).show();
     }
 
 //**********************************************************************
@@ -125,7 +132,7 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
         public void onPreExecute() {
 
             super.onPreExecute();
-            mProgress = new ProgressDialog(DataBaseActivity.this);
+            mProgress = new ProgressDialog(context);
             mProgress.setMessage("Изчакайте, зареждам първоначални данни...");
             mProgress.show();
         }
@@ -146,11 +153,11 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
             //and we make it slow down by 500 ms for each number
 
 
-            DeviceAdapter devAdapter = new DeviceAdapter(DataBaseActivity.this);
-            HostAdapter hostAdapter = new HostAdapter(DataBaseActivity.this);
-            MeasurementAdapter measAdapter = new MeasurementAdapter(DataBaseActivity.this);
-            ObjectAdapter objectAdapter = new ObjectAdapter(DataBaseActivity.this);
-            SampleAdapter sampleAdapter = new SampleAdapter(DataBaseActivity.this);
+            DeviceAdapter devAdapter = new DeviceAdapter(context);
+            HostAdapter hostAdapter = new HostAdapter(context);
+            MeasurementAdapter measAdapter = new MeasurementAdapter(context);
+            ObjectAdapter objectAdapter = new ObjectAdapter(context);
+            SampleAdapter sampleAdapter = new SampleAdapter(context);
 
             devAdapter.insert(new Device("Camera"));
             devAdapter.insert(new Device("DVR"));
@@ -237,7 +244,7 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
 
 //    *****************************************************************
 
-    public class PingDataAsyncTask extends AsyncTask<Void, Void, Void> {
+    public class PingDataAsyncTask extends AsyncTask<Void, Integer, Void> {
         private Context mContext;
 
         @Override
@@ -251,8 +258,8 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
         protected Void doInBackground(Void... params) {
 
 
-            ObjectAdapter objectAdapter = new ObjectAdapter(DataBaseActivity.this);
-            SampleAdapter sampleAdapter = new SampleAdapter(DataBaseActivity.this);
+            ObjectAdapter objectAdapter = new ObjectAdapter(context);
+            SampleAdapter sampleAdapter = new SampleAdapter(context);
 
             Log.e("addPingData", "Broy Object = " + objectAdapter.getAllRecords().size());
 //            int k = 0;
@@ -293,6 +300,7 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
                     speed = ping(url);
                     Log.e("addPingData", " ping url = " + url);
 
+                    publishProgress(idCurendObject);
 
                     sampleAdapter.insert(new Sample(idCurendObject,
                             1,
@@ -316,9 +324,13 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
         }
 
         @Override
-        protected void onProgressUpdate(Void... values) {
+        protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-
+            Log.e("tag", "progress update");
+            if(listener != null) {
+                Log.e("tag", "has listener update");
+                listener.onPing(values[0]);
+            }
             //вызывается в потоке пользовательского интерфейса после вызова publishProgress(Progress…)
             //метод используется для отображения любых форм прогресса
 
@@ -402,4 +414,11 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
     }
 
 
+    public void setPingListener(OnPingReceivedListener list) {
+        this.listener = list;
+    }
+
+    public interface OnPingReceivedListener {
+        public void onPing(int index);
+    }
 }
