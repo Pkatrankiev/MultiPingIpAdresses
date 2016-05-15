@@ -123,21 +123,7 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         @Bind(R.id.image_button_del)
         ImageView imgBtnDel;
 
-        @Bind(R.id.edit_add_descrip)
-        EditText editAddDescrip;
-        @Bind(R.id.edit_add_ip)
-        EditText editAddIpAddress;
-        @Bind(R.id.edit_add_address)
-        EditText editAddAddress;
-        @Bind(R.id.edit_add_info)
-        EditText editAddInfo;
-        @Bind(R.id.spinner_add_host_type)
-        Spinner editAddSpinnerHostType;
-        @Bind(R.id.image_button_add)
-        Spinner editAddImageButtonAdd;
-
-        @Bind(R.id.spinner_add_device_type)
-        ImageView editAddSpinnerDeviceType;
+//
         int position;
 
         public ViewHolder(View itemView) {

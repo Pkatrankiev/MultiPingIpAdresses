@@ -172,10 +172,22 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
             objectAdapter.insert(new Object("213.231.167.82", "Zlatarski m-n", "Vratza, bul.N.Voivodov 6", "zlatarski m-n", 4, 3));
             objectAdapter.insert(new Object("151.237.73.86", "Avto serviz Bobi", "Vratza, krivodolsko shose", "baza", 4, 3));
             objectAdapter.insert(new Object("151.237.78.53", "Vratchanski balkan", "Vratza, patq za Pavloche", "teren", 3, 3));
-//        objectAdapter.insert(new Object("77.76.129.66", "kasta Buzov", "Vratza, pazara", "Kusta i dwor", 1, 1));
-//        objectAdapter.insert(new Object("213.231.145.127", "Dvor maistor Mito", "Vratza, Hr.Botev44 6", "kusta i dvor", 4, 3));
-//        objectAdapter.insert(new Object("83.228.26.205", "kafe VIP", "Vratza, Postata", "kafene", 4, 3));
-//        objectAdapter.insert(new Object("151.237.78.129", "u-ste p.Beron", "Vratza, Metkovec", "Uchiliste", 3, 3));
+            objectAdapter.insert(new Object("77.76.129.66", "kasta Buzov", "Vratza, pazara", "Kusta i dwor", 1, 1));
+            objectAdapter.insert(new Object("213.231.145.127", "Dvor maistor Mito", "Vratza, Hr.Botev44 6", "kusta i dvor", 4, 3));
+            objectAdapter.insert(new Object("83.228.26.205", "kafe VIP", "Vratza, Postata", "kafene", 4, 3));
+            objectAdapter.insert(new Object("151.237.78.129", "u-ste p.Beron", "Vratza, Metkovec", "Uchiliste", 3, 3));
+            objectAdapter.insert(new Object("213.231.171.91", "Office SITY", "Vratza, ul.Lukashov8", "Vhod Trezor", 1, 1));
+            objectAdapter.insert(new Object("213.231.176.206", "Golqmo materialno", "Vratza, bul.M.Orozov 55", "teren", 4, 3));
+            objectAdapter.insert(new Object("213.231.176.207", "Malko materialno", "Vratza, bul.M.Orozov 34", "baza", 4, 3));
+            objectAdapter.insert(new Object("213.231.164.204", "Ekokeramika", "Vratza, bul.Hr.Botev 55", "teren", 3, 3));
+            objectAdapter.insert(new Object("85.187.236.23", "Turkanica", "Vratza, Turkanica", "Kusta i dwor", 1, 1));
+            objectAdapter.insert(new Object("213.231.167.82", "Zlatarski m-n", "Vratza, bul.N.Voivodov 6", "zlatarski m-n", 4, 3));
+            objectAdapter.insert(new Object("151.237.73.86", "Avto serviz Bobi", "Vratza, krivodolsko shose", "baza", 4, 3));
+            objectAdapter.insert(new Object("151.237.78.53", "Vratchanski balkan", "Vratza, patq za Pavloche", "teren", 3, 3));
+            objectAdapter.insert(new Object("77.76.129.66", "kasta Buzov", "Vratza, pazara", "Kusta i dwor", 1, 1));
+            objectAdapter.insert(new Object("213.231.145.127", "Dvor maistor Mito", "Vratza, Hr.Botev44 6", "kusta i dvor", 4, 3));
+            objectAdapter.insert(new Object("83.228.26.205", "kafe VIP", "Vratza, Postata", "kafene", 4, 3));
+            objectAdapter.insert(new Object("151.237.78.129", "u-ste p.Beron", "Vratza, Metkovec", "Uchiliste", 3, 3));
 
             int count = 1;
             int allCount = 1;
@@ -270,11 +282,11 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
 //                        " time = " + getCurrentTimeStamp());
 //
 //            }
-            int k=0;
-            while (k<2) {
+            int k = 0;
+            while (k < 2) {
                 for (Object curenrObject : objectList) {
                     int idCurendObject = curenrObject.getId();
-                    Log.e("addPingData", "ping idCurendObject = " + idCurendObject+"  ping k = " + k);
+                    Log.e("addPingData", "ping idCurendObject = " + idCurendObject + "  ping k = " + k);
                     int speed = 0;
                     String url = curenrObject.getIpAddress();
 
@@ -293,6 +305,7 @@ public class DataBaseActivity extends ActionBarActivity implements TaskCompleted
                             " time = " + getCurrentTimeStamp());
 
                 }
+
             }
 //            }
 
